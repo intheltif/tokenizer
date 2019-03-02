@@ -60,9 +60,32 @@ int main(int argc, char* argv[]) {
 }
 
 /**
-* add javadoc-like comment
+* Description
+*
+* @param token_ptr Token_ptr is the array that holds the token.
 */
-void get_token(char *token_ptr)
-{
+void get_token(char *token_ptr){
    // Add code here.
+}
+
+/*
+ * This clears the array of the current elements that are in the array.
+ *
+ * @param arr Arr is the array that is being cleared.
+ */
+void clearTokens(char *arr){    
+    int i;
+    for(i = 0; i <= TSIZE - 1; i++){
+        arr[i] = '\0';
+    }
+}
+
+/*
+ * This writes to a file and prints out the information about the token in a
+ * certian statement.
+ *
+ * @param arr Arr is the array that is holding the tokens that will be printed.
+ */
+void printToken(char *arr){
+
 }

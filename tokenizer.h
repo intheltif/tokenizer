@@ -14,4 +14,6 @@
 */
 void get_token(char *);   
 
+void printToken(char *);
 
+void clearTokens(char *);
