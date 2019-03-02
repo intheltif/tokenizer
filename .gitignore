@@ -1,0 +1,4 @@
+#Ignore the input and output text files directory provided by Dr. Holliday
+**/input_and_output_files
+
+
