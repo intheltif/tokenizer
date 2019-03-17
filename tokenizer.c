@@ -4,8 +4,9 @@
  * NOTE: The terms 'token' and 'lexeme' are used interchangeably in this
  *       program.
  *
- * @author Your Name
- * @version current date
+ * @author Evert Ball
+ * @author Carley Yancey
+ * @version 03/25/2019
  */
 
 #include <stdio.h>
@@ -88,4 +89,17 @@ void clearTokens(char *arr){
  */
 void printToken(char *arr){
 
+}
+
+/**
+ * A helper function that cycles through the current line until it reaches a 
+ * non-whitespace character.
+ *
+ */
+void getNonWhitespace() {
+    int i = 0;
+    while(isspace(line[i])) {
+        //get next character
+        i++;
+    }
 }
