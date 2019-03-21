@@ -4,8 +4,9 @@
  * NOTE: The terms 'token' and 'lexeme' are used interchangeably in this
  *       program.
  *
- * @author Your Name
- * @version current date
+ * @author Carlee Yancey
+ * @author Evert Ball
+ * @version March 18, 2019
  */
 
 #include <stdio.h>
@@ -17,7 +18,7 @@
 char *line;             // Global pointer to line of input
 
 /**
-* add comment
+* This is the main method for the toKenizer class.
 */
 int main(int argc, char* argv[]) {
    char  token[TSIZE];      /* Spot to hold a token, fixed size */
@@ -50,8 +51,8 @@ int main(int argc, char* argv[]) {
       line = input_line;  // Sets a global pointer to the memory location
                            // where the input line resides.
 
-      // Add code here.
-
+      // Add4 code here.
+    
    }
 
    fclose(in_file);
@@ -87,5 +88,21 @@ void clearTokens(char *arr){
  * @param arr Arr is the array that is holding the tokens that will be printed.
  */
 void printToken(char *arr){
-
+    
 }
+
+
+
+/**
+ * A helper function that cycles through the current line untion it reaches a 
+ * non-whitespace character.
+ *
+ */
+void getNonWhitespace(){
+    int i = 0;
+    while(isspace(line[i])){
+        //get next character
+        i++;
+    }
+}
+
