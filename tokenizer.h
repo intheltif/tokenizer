@@ -1,6 +1,8 @@
 /**
  * Header file for the tokenizer project 
- * @author your_name
+ *
+ * @author Carlee Yancey
+ * @author Evert Ball
  * @version date
  */
 /* Constants */
@@ -17,3 +19,5 @@ void get_token(char *);
 void printToken(char *);
 
 void clearTokens(char *);
+
+int isToken(char);
