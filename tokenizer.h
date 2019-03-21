@@ -20,4 +20,4 @@ void printToken(char *);
 
 void clearTokens(char *);
 
-int isToken(char);
+void getNonWhitespace();

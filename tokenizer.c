@@ -92,7 +92,6 @@ void printToken(char *arr){
 }
 
 
-
 /**
  * A helper function that cycles through the current line untion it reaches a 
  * non-whitespace character.
@@ -106,15 +105,3 @@ void getNonWhitespace(){
     }
 }
 
-/**
- * A helper function that cycles through the current line until it reaches a 
- * non-whitespace character.
- *
- */
-void getNonWhitespace() {
-    int i = 0;
-    while(isspace(line[i])) {
-        //get next character
-        i++;
-    }
-}
