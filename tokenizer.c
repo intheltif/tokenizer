@@ -4,15 +4,9 @@
  * NOTE: The terms 'token' and 'lexeme' are used interchangeably in this
  *       program.
  *
-<<<<<<< HEAD
- * @author Carlee Yancey
- * @author Evert Ball
- * @version March 18, 2019
-=======
  * @author Evert Ball
  * @author Carley Yancey
  * @version 03/25/2019
->>>>>>> c134f3da1af7af2b600cf33ed5b8508668b8f9cd
  */
 
 #include <stdio.h>
@@ -112,8 +106,6 @@ void getNonWhitespace(){
     }
 }
 
-<<<<<<< HEAD
-=======
 /**
  * A helper function that cycles through the current line until it reaches a 
  * non-whitespace character.
@@ -126,4 +118,3 @@ void getNonWhitespace() {
         i++;
     }
 }
->>>>>>> c134f3da1af7af2b600cf33ed5b8508668b8f9cd
