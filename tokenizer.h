@@ -19,6 +19,6 @@ void get_token(char *);
 
 void printToken(char *);
 
-void clearTokens(char *);
+void clear_token(char *);
 
 void get_non_white();

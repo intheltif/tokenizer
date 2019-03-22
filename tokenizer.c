@@ -48,7 +48,7 @@ int main(int argc, char* argv[]) {
   line_count = ZERO; //starts line count at zero;
   int zero = ZERO;
   start = 1;
-  int tok_size, tok_size2;
+  int tok_size1, tok_size2;
    while (fgets(input_line, LINE, in_file) != NULL){
       line = input_line;  // Sets a global pointer to the memory location
                            // where the input line resides.
@@ -59,7 +59,7 @@ int main(int argc, char* argv[]) {
       if(line_count == ZERO){
           clear_token(token);
       }
-      if(token[str1] == "/0"){
+      if(token[str1] == '\0'){
         if(line_count != ZERO){  
             printf("---------------------------------------------------------");
         }
@@ -203,10 +203,10 @@ void get_token(char *token_ptr){
     int i = 0;
     int j;
     int empty = strlen(token_ptr);
-    get_non_White(line);
+    get_non_white(line);
     char *holder;
     if(empty != 0){
-        char *prvTok = token_ptr[empty-1];
+        char prvTok = token_ptr[empty-1];
         holder = line[i];
         while(line[i] == ('0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9') && i < strlen(line)){
             if(holder == prvTok){
@@ -220,53 +220,53 @@ void get_token(char *token_ptr){
     }else if(empty == 0){
         i = 0;
     } 
-    if(line[i] == ('0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|9')){
+    if(line[i] == ('0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9')){
         holder = line[i];
         j = i + 1;
-        while(line[j] == ('0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|9')){
-            holder = strcat(holder,line[j];
+        while(line[j] == ('0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9')){
+            holder = strcat(holder,line[j]);
             j++;
         }
-    }else if(line[i] == "+"){
-        token[empty] = line[i];    
-    }else if(line[i] == "-"){
-        token[empty] = line[i];
-    }else if(line[i] == "*"){
-        token[empty] = line[i];
-    }else if(line[i] == "/"){
-        token[empty] = line[i];
-    }else if(line[i] == "("){
-        token[empty] = line[i];
-    }else if(line[i] == ")"){
-        token[empty] = line[i];
-    }else if(line[i] == "^"){
-        token[empty] = line[i];
-    }else if(line[i] == "="){
-        if(line[i+1] == "="){
-            token[empty] = "==";
+    }else if(line[i] == '+'){
+        token_ptr[empty] = line[i];    
+    }else if(line[i] == '-'){
+        token_ptr[empty] = line[i];
+    }else if(line[i] == '*'){
+        token_ptr[empty] = line[i];
+    }else if(line[i] == '/'){
+        token_ptr[empty] = line[i];
+    }else if(line[i] == '('){
+        token_ptr[empty] = line[i];
+    }else if(line[i] == ')'){
+        token_ptr[empty] = line[i];
+    }else if(line[i] == '^'){
+        token_ptr[empty] = line[i];
+    }else if(line[i] == '='){
+        if(line[i+1] == '='){
+            token_ptr[empty] = "==";
         }else{
-            token[empty] = line[i];
+            token_ptr[empty] = line[i];
         }
-    }else if(line[i] == "<"){
-        if(line[i+1] == "="){
-            token[empty] = "<=";
+    }else if(line[i] == '<'){
+        if(line[i+1] == '='){
+            token_ptr[empty] = "<=";
         }else{
-            token[empty] = line[i];
+            token_ptr[empty] = line[i];
         }
-    }else if(line[i] == ">"){
-        if(line[i+1] == "="){
-            token[empty] = ">=";
+    }else if(line[i] == '>'){
+        if(line[i+1] == '='){
+            token_ptr[empty] = ">=";
         }else{
-            token[empty] = line[i];
+            token_ptr[empty] = line[i];
         }
-    }else if(line[i] == "!"){
-        if(line[i+1] == "="){  
-            token[empty] = "!=";
+    }else if(line[i] == '!'){
+        if(line[i+1] == '='){  
+            token_ptr[empty] = "!=";
         }else{
-        token[empty] = line[i];
+        token_ptr[empty] = line[i];
         }
-    }else if(line[i] == ";"){
-        token[empty] = line[i];
+    }else if(line[i] == ';'){
+        token_ptr[empty] = line[i];
     }else{ 
         printf("===> %s\n", line[i]);
         printf("Lexical error: not a lexeme\n");
@@ -302,8 +302,8 @@ void get_non_white() {
     int i = 0;
     int j;
     while(i < strlen(line)){
-        if(line[i] != " " && line[i] != "\n" && line[i] != "\0") {
-            for(j = i; j < strlen(row); j++){
+        if(line[i] != ' ' && line[i] != '\n' && line[i] != '\0') {
+            for(j = i; j < strlen(line); j++){
                 line[j] = line[j+1];
             }
         }
