@@ -11,6 +11,7 @@
 #define TRUE 1
 #define FALSE 0
 
+#define ZERO 0
 /**
 * add comment
 */
@@ -20,4 +21,4 @@ void printToken(char *);
 
 void clearTokens(char *);
 
-void getNonWhitespace();
+void get_non_white();
