@@ -50,8 +50,11 @@ int main(int argc, char* argv[]) {
    {
       line = input_line;  // Sets a global pointer to the memory location
                            // where the input line resides.
-
-      // Add4 code here.
+      printf("Statement %d", statement_count);
+      get_token(token);
+      count++;
+      printf("Token %d is %s\n", count, token);
+      clear_token(token);
     
    }
 
@@ -66,7 +69,105 @@ int main(int argc, char* argv[]) {
 * @param token_ptr Token_ptr is the array that holds the token.
 */
 void get_token(char *token_ptr){
-   // Add code here.
+
+    int i;
+    char token[TSIZE];
+
+    while(line != NULL) {
+
+        j = 0;
+
+        for(i = 0; i < strlen(line); i++) {
+
+            if(line[i] != " " && line[i] != "\n" && line[i] != "\0") {
+
+                switch(line[j]) {
+
+                       case '+':
+                            *token = line[j];
+                            printf("Lexeme %i is +\n", i);
+                            break;
+
+                       case '-':
+                            token = line[j];
+                            printf("Lexeme %i is -\n", i);
+                            break;
+
+                       case '*':
+                            token = line[j];
+                            printf("Lexeme %i is *\n", i);
+                            break;
+                       case '/':
+                            token = line[j];
+                            printf("Lexeme %i is /\n", i);
+                            break;
+                       case '(':
+                            token = line[j];
+                            printf("Lexeme %i is (\n", i);
+                            break;
+                       case ')':
+                            token = line[j];
+                            printf("Lexeme %i is )\n", i);
+                            break;
+                       case '^':
+                            token = line[j];
+                            printf("Lexeme %i is ^\n", i);
+                            break;
+                       case '=':
+                            if( line[j+1] == "=") {
+                                token = "==";
+                                printf("Lexeme %i is %s\n", i, token);
+                                i++;
+                                break;
+                            } else {
+                                token = line[j];
+                                printf("Lexeme %i is %s\n", i, token);
+                                break;
+                            }
+                       case '<':
+                            if( line[j+1] == "=") {
+                                token = "<=";
+                                printf("Lexeme %i is %s\n", i, token);
+                                i++;
+                                break;
+                            } else {
+                                token = line[j];
+                                printf("Lexeme %i is %s\n", i, token);
+                                break;
+                            }
+                       case '>':
+                            if( line[j+1] == "=") {
+                                token = ">=";
+                                printf("Lexeme %i is %s\n", i, token);
+                                i++;
+                                break;
+                            }
+                            else{
+                                token = line[j];
+                                printf("Lexeme %i is %s\n", i, token);
+                                break;
+                            }
+                       case '!':
+                            if( line[j+1] == "=") {
+                                token = "!=";
+                                i++;
+                                break;
+                            } else {
+                                token = line[j];
+                                break;
+                            }
+                       case [0-9]+:
+                            
+                            break;
+                       case ';':
+                            token = line[j];
+                            break;
+                    }
+            }
+            j++
+        }
+    }
+
 }
 
 /*
@@ -74,12 +175,14 @@ void get_token(char *token_ptr){
  *
  * @param arr Arr is the array that is being cleared.
  */
-void clearTokens(char *arr){    
+void clear_token(char *arr){    
     int i;
     for(i = 0; i <= TSIZE - 1; i++){
         arr[i] = '\0';
     }
 }
+
+
 
 /*
  * This writes to a file and prints out the information about the token in a
@@ -92,16 +195,5 @@ void printToken(char *arr){
 }
 
 
-/**
- * A helper function that cycles through the current line untion it reaches a 
- * non-whitespace character.
- *
- */
-void getNonWhitespace(){
-    int i = 0;
-    while(isspace(line[i])){
-        //get next character
-        i++;
-    }
+void putThisSomewhere() {
 }
-
