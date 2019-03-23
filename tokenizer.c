@@ -16,7 +16,7 @@
 
 // global variables
 char *line;             // Global pointer to line of input
-
+int valid;
 /**
 * This is the main method for the toKenizer class.
 */
@@ -56,35 +56,55 @@ int main(int argc, char* argv[]) {
       int line_size = 0; //start counting with 1.
       int str1 = zero; //used to get first element in token.
       int reset = zero; //used to reset count to zero.
+      int count = 0;      
       if(line_count == ZERO){
           clear_token(token);
       }
       if(token[str1] == '\0'){
         if(line_count != ZERO){  
-            printf("---------------------------------------------------------");
+            printf("---------------------------------------------------------\n");
         }
-        printf("Statement #%d", start);
+        printf("Statement #%d\n", start);
       }
       i = 0;
-      while(line_size < strlen(input_line)){
-        tok_size1 = strlen(token);
-        get_token(token);
-        tok_size2 = strlen(token);
-        if(tok_size1 < tok_size2){
-            printf("Lexeme %d is %s\n", count, token[count]);
-            count++;
-        }
+      valid = TRUE;
+      
+      while(!(isspace(*line))){
+         valid = TRUE;
+         get_token(token);
+         if(valid == TRUE){
+            printf("lexeme %d is %s\n", count, token);         
+         }
+         if(valid == FALSE){
+            printf("===> %c\n", line[i]);
+            printf("Lexical error: not a lexeme\n");
+         }
+         if(valid == TRUE){
+             count++;
+         }
+         if(*token == ';'){
+             start++;
+             count = reset;
+             clear_token(token);
+             break;
+         }else{
+            *line++;
+            while(isspace(*line)){
+                *line++;
+           }
+           }        
         line_size++;
       }
       line_count++;
-      for(i = 0; i < strlen(token); i++){
-        if(token[i] == ";"){
+     // for(i = 0; i < strlen(token); i++){
+        if(*token == ';'){
             start++;
             count = reset;
+            clear_token(token);
             break;
         }
-      }
-      clear_token(token);
+     // }
+      //clear_token(token);
    }
 
    fclose(in_file);
@@ -200,76 +220,110 @@ void get_token(char *token_ptr){
 }
 */
 void get_token(char *token_ptr){
+    valid = TRUE;
     int i = 0;
-    int j;
+    //int j;
     int empty = strlen(token_ptr);
-    get_non_white(line);
-    char *holder;
+    //printf("token length %d\n", empty);
+    //get_non_white(line);
+    //char *holder;
     if(empty != 0){
-        char prvTok = token_ptr[empty-1];
-        holder = line[i];
-        while(line[i] == ('0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9') && i < strlen(line)){
-            if(holder == prvTok){
-              break;  
-            }else{
-                holder = strcat(holder, line[i]);
-            }
+        //printf("in the empty !=0");
+          while(line[i] != token_ptr[empty-1]){
             i++;
-        }
+            //while(line[i] == ' ' || line[i] == '\n' || line[i] == '\0') {
+            //    i++;
+           // }
+          }
+//        char prvTok = token_ptr[empty-1];
+//        holder = line[i];
+//        while(line[i] == ('0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9') && i < strlen(line)){
+//            if(holder == prvTok){
+//              break;  
+//            }else{
+//                holder = strcat(holder, line[i]);
+//            }
+//            i++;
+//        }
         i++;
-    }else if(empty == 0){
-        i = 0;
-    } 
-    if(line[i] == ('0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9')){
-        holder = line[i];
-        j = i + 1;
-        while(line[j] == ('0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9')){
-            holder = strcat(holder,line[j]);
-            j++;
-        }
-    }else if(line[i] == '+'){
-        token_ptr[empty] = line[i];    
+    }
+    //printf("%c\n", line[i]);
+//    if(line[i] == ('0'||'1'||'2'||'3'||'4'||'5'||'6'||'7'||'8'||'9')){
+//        holder = line[i];
+//        j = i + 1;
+//        while(line[j] == ('0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9')){
+//            holder = strcat(holder,line[j]);
+//            j++;
+          // }
+         // if(line[i] == '1'){
+           //   token_ptr = "1";
+             // printf("%s\n",token_ptr); 
+          //}else if(line[i] == '2'){
+            //  token_ptr[empty] = '2';
+         // }
+    if(isdigit(*line)){
+        *token_ptr = *line;
+        //while(
+    }else if(line[i] == '+'){ 
+        *token_ptr = *line;
+        //token_ptr[empty] = '+';    
     }else if(line[i] == '-'){
-        token_ptr[empty] = line[i];
+        *token_ptr = *line;
+        //token_ptr[empty] = '-';
     }else if(line[i] == '*'){
-        token_ptr[empty] = line[i];
+        *token_ptr = *line;
+        //token_ptr[empty] = '*';
     }else if(line[i] == '/'){
-        token_ptr[empty] = line[i];
-    }else if(line[i] == '('){
-        token_ptr[empty] = line[i];
+        *token_ptr = *line;
+        //token_ptr[empty] = '/';
+    }else if(*line == '('){
+        *token_ptr = *line;
+        //token_ptr[empty] = '(';
     }else if(line[i] == ')'){
-        token_ptr[empty] = line[i];
+        *token_ptr = *line;
+        //token_ptr[empty] = ')';
     }else if(line[i] == '^'){
-        token_ptr[empty] = line[i];
+        *token_ptr = *line;
+        //token_ptr[empty] = '^';
     }else if(line[i] == '='){
         if(line[i+1] == '='){
-            token_ptr[empty] = "==";
+            token_ptr[empty] = '=';
+            token_ptr[empty + 1] = '=';
         }else{
-            token_ptr[empty] = line[i];
+            *token_ptr = *line;
+            //token_ptr[empty] = '=';
         }
     }else if(line[i] == '<'){
         if(line[i+1] == '='){
-            token_ptr[empty] = "<=";
+            token_ptr[empty] = '<';
+            token_ptr[empty + 1] = '=';
         }else{
-            token_ptr[empty] = line[i];
+            *token_ptr = *line;
+            //token_ptr[empty] = '<';
         }
     }else if(line[i] == '>'){
         if(line[i+1] == '='){
-            token_ptr[empty] = ">=";
+            token_ptr[empty] = '>';
+            token_ptr[empty + 1] = '=';
         }else{
-            token_ptr[empty] = line[i];
+            *token_ptr = *line;
+          //  token_ptr[empty] = '>';
         }
     }else if(line[i] == '!'){
         if(line[i+1] == '='){  
-            token_ptr[empty] = "!=";
+            token_ptr[empty] = '!';
+            token_ptr[empty + 1] = '=';
         }else{
-        token_ptr[empty] = line[i];
+            *token_ptr = *line;
+        //token_ptr[empty] = '!';
         }
     }else if(line[i] == ';'){
-        token_ptr[empty] = line[i];
-    }else{ 
-        printf("===> %s\n", line[i]);
-        printf("Lexical error: not a lexeme\n");
+        *token_ptr = *line;
+        //token_ptr[empty] = ';';
+    }else{
+        valid = FALSE; 
+       // printf("===> %c\n", line[i]);
+       // printf("Lexical error: not a lexeme\n");
     }
 }
 
@@ -312,6 +366,14 @@ void get_non_white() {
 }
 
 
-
-
-
+    
+         //while(line_size < strlen(input_line)){
+        //tok_size1 = strlen(token);
+        //get_token(token);
+        //tok_size2 = strlen(token);
+        //if(tok_size1 < tok_size2){
+          //  printf("Lexeme %d is %c", count, token[count]);
+           // if(token[count + 1] == '='){
+             //   printf("=");
+               // count++;
+               
