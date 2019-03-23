@@ -49,11 +49,12 @@ int main(int argc, char* argv[]) {
   int zero = ZERO;
   start = 1;
   int tok_size1, tok_size2;
+  clear_token(token);
    while (fgets(input_line, LINE, in_file) != NULL){
       line = input_line;  // Sets a global pointer to the memory location
                            // where the input line resides.
       int i;
-      int line_size = 0; //start counting with 1.
+      int line_size = get_non_white(); //start counting with 1.
       int str1 = zero; //used to get first element in token.
       int reset = zero; //used to reset count to zero.
       int count = 0;      
@@ -67,17 +68,21 @@ int main(int argc, char* argv[]) {
         printf("Statement #%d\n", start);
       }
       i = 0;
-      valid = TRUE;
-      
       while(!(isspace(*line))){
+         //line_size = get_non_white();
          valid = TRUE;
          get_token(token);
+         if(line_size >= LINE){
+             break;
+         }
          if(valid == TRUE){
-            printf("lexeme %d is %s\n", count, token);         
+            printf("lexeme %d is %s\n", count, token);
+            line_size++;         
          }
          if(valid == FALSE){
-            printf("===> %c\n", line[i]);
+            printf("===> %c\n", *line);
             printf("Lexical error: not a lexeme\n");
+            line_size++;
          }
          if(valid == TRUE){
              count++;
@@ -89,18 +94,23 @@ int main(int argc, char* argv[]) {
              break;
          }else{
             *line++;
-            while(isspace(*line)){
-                *line++;
+            if(line_size <= LINE){
+                while(isspace(*line)){
+                    *line++;
+                    line_size++;
+                    if(line_size <= LINE){
+                        break;
+                    }
+                }
            }
-           }        
-        line_size++;
+         }      
       }
       line_count++;
-     // for(i = 0; i < strlen(token); i++){
         if(*token == ';'){
             start++;
             count = reset;
             clear_token(token);
+            line_size = 0;
             break;
         }
      // }
@@ -116,214 +126,59 @@ int main(int argc, char* argv[]) {
 * Description
 *
 * @param token_ptr Token_ptr is the array that holds the token.
-*
-void get_token(char *token_ptr){
-
-    int i;
-    char token[TSIZE];
-
-    while(line != NULL) {
-
-        j = 0;
-
-        for(i = 0; i < strlen(line); i++) {
-
-            if(line[i] != " " && line[i] != "\n" && line[i] != "\0") {
-
-                switch(line[j]) {
-
-                       case '+':
-                            *token = line[j];
-                            printf("Lexeme %i is +\n", i);
-                            break;
-
-                       case '-':
-                            token = line[j];
-                            printf("Lexeme %i is -\n", i);
-                            break;
-
-                       case '*':
-                            token = line[j];
-                            printf("Lexeme %i is *\n", i);
-                            break;
-                       case '/':
-                            token = line[j];
-                            printf("Lexeme %i is /\n", i);
-                            break;
-                       case '(':
-                            token = line[j];
-                            printf("Lexeme %i is (\n", i);
-                            break;
-                       case ')':
-                            token = line[j];
-                            printf("Lexeme %i is )\n", i);
-                            break;
-                       case '^':
-                            token = line[j];
-                            printf("Lexeme %i is ^\n", i);
-                            break;
-                       case '=':
-                            if( line[j+1] == "=") {
-                                token = "==";
-                                printf("Lexeme %i is %s\n", i, token);
-                                i++;
-                                break;
-                            } else {
-                                token = line[j];
-                                printf("Lexeme %i is %s\n", i, token);
-                                break;
-                            }
-                       case '<':
-                            if( line[j+1] == "=") {
-                                token = "<=";
-                                printf("Lexeme %i is %s\n", i, token);
-                                i++;
-                                break;
-                            } else {
-                                token = line[j];
-                                printf("Lexeme %i is %s\n", i, token);
-                                break;
-                            }
-                       case '>':
-                            if( line[j+1] == "=") {
-                                token = ">=";
-                                printf("Lexeme %i is %s\n", i, token);
-                                i++;
-                                break;
-                            }
-                            else{
-                                token = line[j];
-                                printf("Lexeme %i is %s\n", i, token);
-                                break;
-                            }
-                       case '!':
-                            if( line[j+1] == "=") {
-                                token = "!=";
-                                i++;
-                                break;
-                            } else {
-                                token = line[j];
-                                break;
-                            }
-                       case [0-9]+:
-                            
-                            break;
-                       case ';':
-                            token = line[j];
-                            break;
-                    }
-            }
-            j++
-        }
-    }
-
-}
 */
 void get_token(char *token_ptr){
     valid = TRUE;
     int i = 0;
-    //int j;
     int empty = strlen(token_ptr);
-    //printf("token length %d\n", empty);
-    //get_non_white(line);
-    //char *holder;
-    if(empty != 0){
-        //printf("in the empty !=0");
-          while(line[i] != token_ptr[empty-1]){
-            i++;
-            //while(line[i] == ' ' || line[i] == '\n' || line[i] == '\0') {
-            //    i++;
-           // }
-          }
-//        char prvTok = token_ptr[empty-1];
-//        holder = line[i];
-//        while(line[i] == ('0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9') && i < strlen(line)){
-//            if(holder == prvTok){
-//              break;  
-//            }else{
-//                holder = strcat(holder, line[i]);
-//            }
-//            i++;
-//        }
-        i++;
-    }
-    //printf("%c\n", line[i]);
-//    if(line[i] == ('0'||'1'||'2'||'3'||'4'||'5'||'6'||'7'||'8'||'9')){
-//        holder = line[i];
-//        j = i + 1;
-//        while(line[j] == ('0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9')){
-//            holder = strcat(holder,line[j]);
-//            j++;
-          // }
-         // if(line[i] == '1'){
-           //   token_ptr = "1";
-             // printf("%s\n",token_ptr); 
-          //}else if(line[i] == '2'){
-            //  token_ptr[empty] = '2';
-         // }
     if(isdigit(*line)){
         *token_ptr = *line;
-        //while(
-    }else if(line[i] == '+'){ 
+    }else if(*line == '+'){ 
         *token_ptr = *line;
-        //token_ptr[empty] = '+';    
-    }else if(line[i] == '-'){
+    }else if(*line == '-'){
         *token_ptr = *line;
-        //token_ptr[empty] = '-';
-    }else if(line[i] == '*'){
+    }else if(*line == '*'){
         *token_ptr = *line;
-        //token_ptr[empty] = '*';
-    }else if(line[i] == '/'){
+    }else if(*line == '/'){
         *token_ptr = *line;
-        //token_ptr[empty] = '/';
     }else if(*line == '('){
         *token_ptr = *line;
-        //token_ptr[empty] = '(';
-    }else if(line[i] == ')'){
+    }else if(*line == ')'){
         *token_ptr = *line;
-        //token_ptr[empty] = ')';
-    }else if(line[i] == '^'){
+    }else if(*line == '^'){
         *token_ptr = *line;
-        //token_ptr[empty] = '^';
-    }else if(line[i] == '='){
-        if(line[i+1] == '='){
-            token_ptr[empty] = '=';
-            token_ptr[empty + 1] = '=';
+    }else if(*line == '='){
+        if(*line++ == '='){
+            *token_ptr = '=';
+            *token_ptr++ = '=';
         }else{
             *token_ptr = *line;
-            //token_ptr[empty] = '=';
         }
-    }else if(line[i] == '<'){
-        if(line[i+1] == '='){
-            token_ptr[empty] = '<';
-            token_ptr[empty + 1] = '=';
+    } else if(*line == '<'){
+        if(*line++ == '='){
+            *token_ptr = '<';
+            *token_ptr++ = '=';
         }else{
             *token_ptr = *line;
-            //token_ptr[empty] = '<';
         }
-    }else if(line[i] == '>'){
-        if(line[i+1] == '='){
-            token_ptr[empty] = '>';
-            token_ptr[empty + 1] = '=';
+    }else if(*line == '>'){
+        if(*line++ == '='){
+            *token_ptr = '>';
+            *token_ptr++ = '=';
         }else{
             *token_ptr = *line;
-          //  token_ptr[empty] = '>';
         }
-    }else if(line[i] == '!'){
-        if(line[i+1] == '='){  
-            token_ptr[empty] = '!';
-            token_ptr[empty + 1] = '=';
+    }else if(*line == '!'){
+        if(*line++ == '='){  
+            *token_ptr = '!';
+            *token_ptr++ = '=';
         }else{
             *token_ptr = *line;
-        //token_ptr[empty] = '!';
         }
-    }else if(line[i] == ';'){
+    }else if(*line == ';'){
         *token_ptr = *line;
-        //token_ptr[empty] = ';';
     }else{
         valid = FALSE; 
-       // printf("===> %c\n", line[i]);
-       // printf("Lexical error: not a lexeme\n");
     }
 }
 
@@ -352,17 +207,14 @@ void printToken(char *arr){
 }
 
 
-void get_non_white() {
+int get_non_white() {
     int i = 0;
-    int j;
-    while(i < strlen(line)){
-        if(line[i] != ' ' && line[i] != '\n' && line[i] != '\0') {
-            for(j = i; j < strlen(line); j++){
-                line[j] = line[j+1];
-            }
-        }
+    while(isspace(*line)){
         i++;
+        *line++;
     }
+    return i;
+
 }
 
 

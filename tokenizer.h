@@ -21,4 +21,4 @@ void printToken(char *);
 
 void clear_token(char *);
 
-void get_non_white();
+int get_non_white();
