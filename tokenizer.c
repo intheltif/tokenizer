@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include "tokenizer.h"
 
+#include <ctype.h>
 // global variables
 char *line;             // Global pointer to line of input
 int valid;
@@ -45,60 +46,70 @@ int main(int argc, char* argv[]) {
     fprintf(stderr, "ERROR: could not open %s for writing\n", argv[2]);
     exit(1);
   }
-  line_count = ZERO; //starts line count at zero;
-  int zero = ZERO;
+
+  line_count = 0;; //starts line count at zero;
   start = 1;
-  int tok_size1, tok_size2;
-  clear_token(token);
+  count = 0;
+  int next_stat = TRUE;
+  int line_size, length, same, size; 
    while (fgets(input_line, LINE, in_file) != NULL){
+      
       line = input_line;  // Sets a global pointer to the memory location
                            // where the input line resides.
-      int i;
-      int line_size = get_non_white(); //start counting with 1.
-      int str1 = zero; //used to get first element in token.
-      int reset = zero; //used to reset count to zero.
-      int count = 0;      
-      if(line_count == ZERO){
+      line_size = get_non_white();
+      length = strlen(input_line);
+      same = length - line_size; 
+      if((line_count == 0 || next_stat == TRUE)){
           clear_token(token);
       }
-      if(token[str1] == '\0'){
-        if(line_count != ZERO){  
+      
+      if(*token == '\0' && same != 0){
+        if(line_count != 0){  
             printf("---------------------------------------------------------\n");
         }
-        printf("Statement #%d\n", start);
+        if(next_stat){
+            printf("Statement #%d\n", start);
+        }
       }
-      i = 0;
-      while(!(isspace(*line))){
-         //line_size = get_non_white();
+      while(!(isspace(*line)) && *line != '\0'){
          valid = TRUE;
          get_token(token);
-         if(line_size >= LINE){
-             break;
-         }
          if(valid == TRUE){
             printf("lexeme %d is %s\n", count, token);
-            line_size++;         
+            size = strlen(token);
+            while(size > 0){
+                token[size]= '\0';
+                size--;
+            }
+            line_size++;
+            count++;         
          }
-         if(valid == FALSE){
-            printf("===> %c\n", *line);
-            printf("Lexical error: not a lexeme\n");
+         if(valid == FALSE){ 
+            if(*line != '\0'){
+                printf("===> %c\n", *line);
+                printf("Lexical error: not a lexeme\n");
+            }
             line_size++;
          }
-         if(valid == TRUE){
-             count++;
-         }
          if(*token == ';'){
-             start++;
-             count = reset;
-             clear_token(token);
+            start++;
+            count = 0;
+            next_stat = TRUE;
+            break; 
+         }else if(line_size >= length){
              break;
          }else{
-            *line++;
-            if(line_size <= LINE){
+            line++;
+            next_stat = FALSE;
+            if(line_size < length){
                 while(isspace(*line)){
-                    *line++;
+                    line++;
                     line_size++;
-                    if(line_size <= LINE){
+                    if(line_size < length && !(isspace(*line))){
+                        break;
+                    }else if(line_size > length && !(isspace(*line))){
+                        break;
+                    }else if(line_size > length){
                         break;
                     }
                 }
@@ -106,15 +117,6 @@ int main(int argc, char* argv[]) {
          }      
       }
       line_count++;
-        if(*token == ';'){
-            start++;
-            count = reset;
-            clear_token(token);
-            line_size = 0;
-            break;
-        }
-     // }
-      //clear_token(token);
    }
 
    fclose(in_file);
@@ -129,10 +131,17 @@ int main(int argc, char* argv[]) {
 */
 void get_token(char *token_ptr){
     valid = TRUE;
-    int i = 0;
-    int empty = strlen(token_ptr);
     if(isdigit(*line)){
         *token_ptr = *line;
+        line++;
+        while(isdigit(*line)){
+            token_ptr++;
+            *token_ptr = *line;
+            line++;
+        }
+        if(!(isdigit(*line))){
+            line--;
+        }
     }else if(*line == '+'){ 
         *token_ptr = *line;
     }else if(*line == '-'){
@@ -148,32 +157,44 @@ void get_token(char *token_ptr){
     }else if(*line == '^'){
         *token_ptr = *line;
     }else if(*line == '='){
-        if(*line++ == '='){
-            *token_ptr = '=';
-            *token_ptr++ = '=';
-        }else{
-            *token_ptr = *line;
+        *token_ptr = *line;
+        line++;
+        if(*line == '='){
+            token_ptr++;
+            *token_ptr = *line; 
+        }
+        else{
+            line--;
         }
     } else if(*line == '<'){
-        if(*line++ == '='){
-            *token_ptr = '<';
-            *token_ptr++ = '=';
-        }else{
-            *token_ptr = *line;
+        *token_ptr = *line;
+        line++;
+        if(*line == '='){
+            token_ptr++;
+            *token_ptr = *line; 
+        }
+        else{
+            line--;
         }
     }else if(*line == '>'){
-        if(*line++ == '='){
-            *token_ptr = '>';
-            *token_ptr++ = '=';
-        }else{
-            *token_ptr = *line;
+        *token_ptr = *line;
+        line++;
+        if(*line == '='){
+            token_ptr++;
+            *token_ptr = *line; 
+        }
+        else{
+            line--;
         }
     }else if(*line == '!'){
-        if(*line++ == '='){  
-            *token_ptr = '!';
-            *token_ptr++ = '=';
-        }else{
-            *token_ptr = *line;
+        *token_ptr = *line;
+        line++;
+        if(*line == '='){  
+            token_ptr++;
+            *token_ptr = *line; 
+        }
+        else{
+            line--;
         }
     }else if(*line == ';'){
         *token_ptr = *line;
@@ -187,15 +208,18 @@ void get_token(char *token_ptr){
  *
  * @param arr Arr is the array that is being cleared.
  */
-void clear_token(char *arr){    
-    int i;
-    for(i = 0; i <= TSIZE - 1; i++){
-        arr[i] = '\0';
+void clear_token(char *token_ptr){    
+    int i = 0;
+    while( i < TSIZE){
+        *token_ptr = '\0';
+        i++;
+        token_ptr++;
     }
 }
 
 
-
+void clear_line(char *row){
+}
 /*
  * This writes to a file and prints out the information about the token in a
  * certian statement.
@@ -207,25 +231,15 @@ void printToken(char *arr){
 }
 
 
-int get_non_white() {
+int get_non_white() { 
     int i = 0;
     while(isspace(*line)){
         i++;
-        *line++;
+        line++;
     }
     return i;
 
+} 
+
+void reset_line(){
 }
-
-
-    
-         //while(line_size < strlen(input_line)){
-        //tok_size1 = strlen(token);
-        //get_token(token);
-        //tok_size2 = strlen(token);
-        //if(tok_size1 < tok_size2){
-          //  printf("Lexeme %d is %c", count, token[count]);
-           // if(token[count + 1] == '='){
-             //   printf("=");
-               // count++;
-               
