@@ -30,28 +30,36 @@ int main(int argc, char* argv[]) {
          start,             /* start of new statement           */
          count;             /* count of tokens                  */
 
+  //Prints usage message if user doesn't provide correct input.
   if (argc != 3) {
     printf("Usage: tokenizer inputFile outputFile\n");
     exit(1);
   }
 
+  /* The user specified input filename */
   in_file = fopen(argv[1], "r");
   if (in_file == NULL) {
     fprintf(stderr, "ERROR: could not open %s for reading\n", argv[1]);
     exit(1);
   }
 
+  /* The user specified output filename */
   out_file = fopen(argv[2], "w");
   if (out_file == NULL) {
     fprintf(stderr, "ERROR: could not open %s for writing\n", argv[2]);
     exit(1);
   }
-
-  line_count = 0;; //starts line count at zero;
-  start = 1;
+  /* Keeps track of the number of lines of input. */
+  line_count = 0;
+  /* Represents the current statement number. */
+  start = 1; //TODO can we call it stmnt_num instead?
+  /* Amount of lexemes found in the current statement. */
   count = 0;
+  /*Checks if this is the next statement. Used to check <=, ==, etc. */
   int next_stat = TRUE;
+  /* A few counter variables TODO how can we document these better? */
   int line_size, length, same, size; 
+
    while (fgets(input_line, LINE, in_file) != NULL){
       
       line = input_line;  // Sets a global pointer to the memory location
@@ -61,7 +69,8 @@ int main(int argc, char* argv[]) {
       line_size = get_non_white(); 
       //gets the length of the current line of input
       length = strlen(input_line);
-      //what is same? maybe change this var name
+      //TODO what is same? maybe change this var name to something
+      //     more descriptive.
       same = length - line_size;
 
       if((line_count == 0 || next_stat == TRUE)){ //next_stat is the next statement
@@ -130,7 +139,8 @@ int main(int argc, char* argv[]) {
 }
 
 /**
-* Description
+* Gets a single input token from the current line of input, and adds it to
+* the array that holds the currently processed token.
 *
 * @param token_ptr Token_ptr is the array that holds the token.
 */
@@ -235,7 +245,12 @@ void printToken(char *arr){
     
 }
 
-
+/*
+ * This functino increments the line pointer past any whitespace it finds,
+ * thus making it easier to parse input. 
+ *
+ * @return the number of whitespace characters that were found.
+ */
 int get_non_white() { 
     int i = 0;
     while(isspace(*line)){
@@ -246,5 +261,3 @@ int get_non_white() {
 
 } 
 
-void reset_line(){
-}
