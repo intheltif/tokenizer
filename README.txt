@@ -18,6 +18,7 @@ To compile
  
 To Run 
     ./tokenizer input_errors.txt output_erros.txt
+
 #Output to a file
 
 If there are no errors found.(Normal output)
@@ -39,4 +40,4 @@ If there is an error found.(Error output)
 
 
 #Bugs 
-Currently there are no bugs in a program.
+Currently there are no bugs in this program.
