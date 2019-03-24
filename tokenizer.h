@@ -11,16 +11,11 @@
 #define TRUE 1
 #define FALSE 0
 
-#define ZERO 0
 /**
-* add comment
+* function protypes.
 */
 void get_token(char *);   
 
-void printToken(char *);
-
 void clear_token(char *);
 
-void clear_line(char *);
-void reset_line();
 int get_non_white();

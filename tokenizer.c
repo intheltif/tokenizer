@@ -17,7 +17,7 @@
 #include <ctype.h>
 // global variables
 char *line;             // Global pointer to line of input
-int valid;
+int valid; //Global booleen for it token is a lexeme.
 /**
 * This is the main method for the tokenizer class.
 */
@@ -52,67 +52,65 @@ int main(int argc, char* argv[]) {
   /* Keeps track of the number of lines of input. */
   line_count = 0;
   /* Represents the current statement number. */
-  start = 1; //TODO can we call it stmnt_num instead?
+  start = 1; //TODO can we call it stmnt_num instead?TODO no this is given by Holliday
   /* Amount of lexemes found in the current statement. */
   count = 0;
   /*Checks if this is the next statement. Used to check <=, ==, etc. */
   int next_stat = TRUE;
-  /* A few counter variables TODO how can we document these better? */
-  int line_size, length, same, size; 
+  /* A few counter variables TODO how can we document these better?TODO not sure but they are needed */
+  int line_size, length, blank_line, size; 
 
    while (fgets(input_line, LINE, in_file) != NULL){
       
       line = input_line;  // Sets a global pointer to the memory location
                            // where the input line resides.
 
-      //get's the number of spaces in a line
+      //get's the number of spaces in a line.
       line_size = get_non_white(); 
-      //gets the length of the current line of input
+      //gets the length of the current line of input.
       length = strlen(input_line);
-      //TODO what is same? maybe change this var name to something
-      //     more descriptive.
-      same = length - line_size;
+      //if blank_line is zero then then line is just whitespace.
+      blank_line = length - line_size;
 
-      if((line_count == 0 || next_stat == TRUE)){ //next_stat is the next statement
+      if((line_count == 0 || next_stat == TRUE)){ 
           clear_token(token);
       }
-      
-      if(*token == '\0' && same != 0){
+      //if next_stat is true and blank_line is not equal to 0, then prints.
+      if(next_stat && blank_line != 0){  
         if(line_count != 0){  
             fprintf(out_file, "---------------------------------------------------------\n");
         }
-        if(next_stat){
-            fprintf(out_file, "Statement #%d\n", start);
-        }
+        fprintf(out_file, "Statement #%d\n", start);
       }
+      //While loop gets tokens of line and out puts info.
       while(!(isspace(*line)) && *line != '\0'){
-         valid = TRUE;
-         get_token(token);
-         if(valid == TRUE){
-            fprintf(out_file, "lexeme %d is %s\n", count, token);
-            size = strlen(token);
-            while(size > 0){
+        valid = TRUE;
+        get_token(token);
+        if(valid == TRUE){
+            fprintf(out_file, "Lexeme %d is %s\n", count, token);
+            size = strlen(token);//gets length of token
+            while(size > 0){//if token is more than size of 0 resets token to 0.
                 token[size]= '\0';
                 size--;
             }
             line_size++;
             count++;         
-         }
-         if(valid == FALSE){ 
+        }
+        if(valid == FALSE){ 
             if(*line != '\0'){
                 fprintf(out_file, "===> '%c'\n", *line);
                 fprintf(out_file, "Lexical error: not a lexeme\n");
             }
             line_size++;
-         }
-         if(*token == ';'){
+        }
+        if(*token == ';'){//end of statment.
             start++;
             count = 0;
             next_stat = TRUE;
             break; 
-         }else if(line_size >= length){
-             break;
-         }else{
+        }else if(line_size >= length){ //line_size it greater the input_line
+            break;
+        }else{
             line++;
             next_stat = FALSE;
             if(line_size < length){
@@ -125,14 +123,13 @@ int main(int argc, char* argv[]) {
                         break;
                     }else if(line_size > length){
                         break;
-                    }
-                }
-           }
-         }      
-      }
+                    }//ends if.
+                }//ends while.
+            }//ends if.
+        }//ends else.      
+      }//ends while.
       line_count++;
-   }
-
+   }//ends while.
    fclose(in_file);
    fclose(out_file);
    return 0;
@@ -149,7 +146,7 @@ void get_token(char *token_ptr){
     if(isdigit(*line)){
         *token_ptr = *line;
         line++;
-        while(isdigit(*line)){
+        while(isdigit(*line)){ 
             token_ptr++;
             *token_ptr = *line;
             line++;
@@ -179,7 +176,7 @@ void get_token(char *token_ptr){
             *token_ptr = *line; 
         }
         else{
-            line--;
+            line--; 
         }
     } else if(*line == '<'){
         *token_ptr = *line;
@@ -221,7 +218,7 @@ void get_token(char *token_ptr){
 /*
  * This clears the array of the current elements that are in the array.
  *
- * @param arr Arr is the array that is being cleared.
+ * @param token_ptr Token_ptr is the array that is being cleared.
  */
 void clear_token(char *token_ptr){    
     int i = 0;
@@ -232,21 +229,8 @@ void clear_token(char *token_ptr){
     }
 }
 
-
-void clear_line(char *row){
-}
 /*
- * This writes to a file and prints out the information about the token in a
- * certian statement.
- *
- * @param arr Arr is the array that is holding the tokens that will be printed.
- */
-void printToken(char *arr){
-    
-}
-
-/*
- * This functino increments the line pointer past any whitespace it finds,
+ * This function increments the line pointer past any whitespace it finds,
  * thus making it easier to parse input. 
  *
  * @return the number of whitespace characters that were found.
@@ -258,6 +242,5 @@ int get_non_white() {
         line++;
     }
     return i;
-
 } 
 
