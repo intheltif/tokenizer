@@ -52,12 +52,12 @@ int main(int argc, char* argv[]) {
   /* Keeps track of the number of lines of input. */
   line_count = 0;
   /* Represents the current statement number. */
-  start = 1; //TODO can we call it stmnt_num instead?TODO no this is given by Holliday
+  start = 1;
   /* Amount of lexemes found in the current statement. */
   count = 0;
   /*Checks if this is the next statement. Used to check <=, ==, etc. */
   int next_stat = TRUE;
-  /* A few counter variables TODO how can we document these better?TODO not sure but they are needed */
+  /* A few counter variables. See their usage below. */
   int line_size, length, blank_line, size; 
 
    while (fgets(input_line, LINE, in_file) != NULL){
