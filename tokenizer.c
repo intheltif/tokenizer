@@ -19,7 +19,7 @@
 char *line;             // Global pointer to line of input
 int valid;
 /**
-* This is the main method for the toKenizer class.
+* This is the main method for the tokenizer class.
 */
 int main(int argc, char* argv[]) {
    char  token[TSIZE];      /* Spot to hold a token, fixed size */
@@ -56,26 +56,31 @@ int main(int argc, char* argv[]) {
       
       line = input_line;  // Sets a global pointer to the memory location
                            // where the input line resides.
-      line_size = get_non_white();
+
+      //get's the number of spaces in a line
+      line_size = get_non_white(); 
+      //gets the length of the current line of input
       length = strlen(input_line);
-      same = length - line_size; 
-      if((line_count == 0 || next_stat == TRUE)){
+      //what is same? maybe change this var name
+      same = length - line_size;
+
+      if((line_count == 0 || next_stat == TRUE)){ //next_stat is the next statement
           clear_token(token);
       }
       
       if(*token == '\0' && same != 0){
         if(line_count != 0){  
-            printf("---------------------------------------------------------\n");
+            fprintf(out_file, "---------------------------------------------------------\n");
         }
         if(next_stat){
-            printf("Statement #%d\n", start);
+            fprintf(out_file, "Statement #%d\n", start);
         }
       }
       while(!(isspace(*line)) && *line != '\0'){
          valid = TRUE;
          get_token(token);
          if(valid == TRUE){
-            printf("lexeme %d is %s\n", count, token);
+            fprintf(out_file, "lexeme %d is %s\n", count, token);
             size = strlen(token);
             while(size > 0){
                 token[size]= '\0';
@@ -86,8 +91,8 @@ int main(int argc, char* argv[]) {
          }
          if(valid == FALSE){ 
             if(*line != '\0'){
-                printf("===> %c\n", *line);
-                printf("Lexical error: not a lexeme\n");
+                fprintf(out_file, "===> '%c'\n", *line);
+                fprintf(out_file, "Lexical error: not a lexeme\n");
             }
             line_size++;
          }
